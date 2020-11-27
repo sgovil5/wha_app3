@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "385380913879",
+    "firebase_url": "https://wha-test3.firebaseio.com",
+    "project_id": "wha-test3",
+    "storage_bucket": "wha-test3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385380913879:android:d1f32f0c2a55489f7d9692",
+        "android_client_info": {
+          "package_name": "com.example.wha_app3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "385380913879-l218q3qgp03b5uddhr0a4hap94usdcpt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPx8HuiJXddnx64ozw61IiFx0cF7CzTX0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "385380913879-l218q3qgp03b5uddhr0a4hap94usdcpt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
