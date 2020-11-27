@@ -46,7 +46,7 @@ class ArticleItem extends StatelessWidget {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    modality,
+                    modality.toUpperCase(),
                     style: TextStyle(
                       fontSize: 28,
                       color: Theme.of(context).primaryColor,
