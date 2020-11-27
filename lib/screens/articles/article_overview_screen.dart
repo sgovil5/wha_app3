@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wha_app3/widgets/article/article_item.dart';
 
 class ArticleOverviewScreen extends StatelessWidget {
   @override
@@ -17,6 +18,7 @@ class ArticleOverviewScreen extends StatelessWidget {
                     color: Theme.of(context).primaryColor, fontSize: 20),
               ),
             ),
+            ArticleItem(modality: 'yoga'),
           ],
         ),
       ),

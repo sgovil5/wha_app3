@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import './screens/article_overview_screen.dart';
+import 'screens/articles/article_overview_screen.dart';
 import './screens/auth_screen.dart';
 
 void main() {
@@ -19,8 +19,17 @@ class _WHAAppState extends State<WHAApp> {
     return MaterialApp(
       title: "WHAApp",
       theme: ThemeData(
-        primaryColor: const Color(0xffF1FFF9),
-        scaffoldBackgroundColor: const Color(0xff222B32),
+        primarySwatch: Colors.pink,
+        backgroundColor: Colors.pink,
+        accentColor: Colors.deepPurple,
+        accentColorBrightness: Brightness.dark,
+        buttonTheme: ButtonTheme.of(context).copyWith(
+          buttonColor: Colors.pink,
+          textTheme: ButtonTextTheme.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
       ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.onAuthStateChanged,
