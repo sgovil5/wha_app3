@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wha_app3/screens/article_search_screen.dart';
+import 'package:wha_app3/screens/bottom_nav_bar.dart';
 
 import 'screens/articles/article_overview_screen.dart';
-import './screens/auth_screen.dart';
+import 'screens/auth/auth_screen.dart';
 
 void main() {
   runApp(WHAApp());
@@ -19,23 +21,14 @@ class _WHAAppState extends State<WHAApp> {
     return MaterialApp(
       title: "WHAApp",
       theme: ThemeData(
-        primarySwatch: Colors.pink,
-        backgroundColor: Colors.pink,
-        accentColor: Colors.deepPurple,
-        accentColorBrightness: Brightness.dark,
-        buttonTheme: ButtonTheme.of(context).copyWith(
-          buttonColor: Colors.pink,
-          textTheme: ButtonTextTheme.primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
+        primaryColor: const Color(0xffF1FFF9),
+        scaffoldBackgroundColor: const Color(0xff222B32),
       ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.onAuthStateChanged,
         builder: (ctx, userSnapshot) {
           if (userSnapshot.hasData) {
-            return ArticleOverviewScreen();
+            return BottomNavBar();
           }
           return AuthScreen();
         },

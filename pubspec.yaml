@@ -32,6 +32,7 @@ dependencies:
   firebase_auth: 0.16.1
   image_picker: 0.6.7
   firebase_storage: ^3.1.5
+  flutter_swiper: ^1.1.6
 
   #IMPORTANT!!!!!!!!!!!!!!!! Add configuration for image_picker in Runner/Info.plist for iOS
 
