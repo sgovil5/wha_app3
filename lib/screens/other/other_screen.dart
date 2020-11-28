@@ -1,22 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../other/about_us_swiper.dart';
 
 class OtherScreen extends StatelessWidget {
-  void selectOtherPage(BuildContext context, String page) {
-    var pushPage;
-    if (page == "About Us") {
-      pushPage = AboutUsSwiper.routeName;
-    }
+  void selectAboutUs(BuildContext context) {
     Navigator.of(context)
         .pushNamed(
-      pushPage,
+      AboutUsSwiper.routeName,
     )
         .then((result) {
       if (result != null) {}
     });
   }
 
-  Widget buildSection(BuildContext context, String text, String page) {
+  void logout(BuildContext context) {
+    FirebaseAuth.instance.signOut();
+  }
+
+  Widget buildSection(BuildContext context, String text, Function action) {
     return Column(
       children: [
         Divider(
@@ -25,7 +26,7 @@ class OtherScreen extends StatelessWidget {
           height: 0,
         ),
         InkWell(
-          onTap: () => selectOtherPage(context, page),
+          onTap: () => action(context),
           child: Container(
             padding: EdgeInsets.all(20),
             alignment: Alignment.center,
@@ -57,8 +58,10 @@ class OtherScreen extends StatelessWidget {
                   "https://www.wholistichealthalliance.org/images/logo.png"),
             ),
           ),
-          buildSection(context, "About Wholistic Health Alliance", "About Us"),
-          buildSection(context, "Terms of Use and Service", "Terms"),
+          buildSection(
+              context, "About Wholistic Health Alliance", selectAboutUs),
+          buildSection(context, "Terms of Use and Service", null),
+          buildSection(context, "Logout", logout),
           Divider(
             thickness: 2,
             color: Colors.white,

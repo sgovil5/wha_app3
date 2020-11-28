@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:wha_app3/screens/article_search_screen.dart';
-import 'package:wha_app3/screens/bottom_nav_bar.dart';
 
-import 'screens/articles/article_overview_screen.dart';
+import 'screens/bottom_nav_bar.dart';
 import 'screens/auth/auth_screen.dart';
+import 'screens/other/about_us_swiper.dart';
 
 void main() {
   runApp(WHAApp());
@@ -34,6 +33,9 @@ class _WHAAppState extends State<WHAApp> {
         },
       ),
       initialRoute: '/',
+      routes: {
+        AboutUsSwiper.routeName: (ctx) => AboutUsSwiper(),
+      },
     );
   }
 }
