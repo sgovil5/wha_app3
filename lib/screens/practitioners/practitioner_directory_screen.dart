@@ -3,11 +3,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/practitioner/practitioner_preview.dart';
+import './practitioner_detail_screen.dart';
 
 class PractitionerDirectoryScreen extends StatefulWidget {
   @override
   _PractitionerDirectoryScreenState createState() =>
       _PractitionerDirectoryScreenState();
+}
+
+void selectPractitioner(BuildContext context, id) {
+  Navigator.of(context)
+      .pushNamed(
+    PractitionerDetailScreen.routeName,
+    arguments: id,
+  )
+      .then((result) {
+    if (result != null) {}
+  });
 }
 
 class _PractitionerDirectoryScreenState
@@ -53,7 +65,12 @@ class _PractitionerDirectoryScreenState
                         scrollDirection: Axis.vertical,
                         itemCount: practitionerData.length,
                         itemBuilder: (ctx, index) => InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            selectPractitioner(
+                              context,
+                              practitionerData[index].documentID,
+                            );
+                          },
                           child: PractitionerPreview(
                             practitionerData[index]['name'],
                             practitionerData[index]['imageUrl'],

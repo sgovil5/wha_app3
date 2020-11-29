@@ -31,33 +31,38 @@ class PractitionerPreview extends StatelessWidget {
                   backgroundImage: NetworkImage(imageUrl),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      alignment: Alignment.topCenter,
-                      child: Text(
-                        name,
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(40),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          name,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.bottomLeft,
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        modalityText,
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.white,
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        padding: EdgeInsets.all(15),
+                        child: Text(
+                          modalityText,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

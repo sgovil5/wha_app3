@@ -1,17 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../screens/articles/article_detail_screen.dart';
+
 class ArticlePreview extends StatelessWidget {
-  final Key key;
+  final String id;
   final String title;
   final String imageUrl;
 
-  ArticlePreview(this.title, this.imageUrl, {this.key});
+  ArticlePreview(this.title, this.imageUrl, this.id);
+
+  void selectArticle(BuildContext context, id) {
+    print(id);
+    Navigator.of(context)
+        .pushNamed(
+      ArticleDetailScreen.routeName,
+      arguments: id,
+    )
+        .then((result) {
+      if (result != null) {}
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
-      //selectArticle(context, id), //selectMeal(context, id),
+      onTap: () {
+        selectArticle(context, id);
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),

@@ -10,19 +10,6 @@ class ArticleItem extends StatelessWidget {
   ArticleItem({
     @required this.modality,
   });
-/*
-  void selectArticle(BuildContext context, id) {
-    print(id);
-    Navigator.of(context)
-        .pushNamed(
-      ArticleDetailScreen.routeName,
-      arguments: id,
-    )
-        .then((result) {
-      if (result != null) {}
-    });
-  }
-*/
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -32,7 +19,10 @@ class ArticleItem extends StatelessWidget {
           return Center(child: CircularProgressIndicator());
         }
         return StreamBuilder(
-          stream: Firestore.instance.collection('articles').snapshots(),
+          stream: Firestore.instance
+              .collection('articles')
+              .where(modality, isEqualTo: true)
+              .snapshots(),
           builder: (context, articleSnapshot) {
             if (articleSnapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -68,7 +58,7 @@ class ArticleItem extends StatelessWidget {
                               return ArticlePreview(
                                 articleData[index]['title'],
                                 articleData[index]['imageUrl'],
-                                key: ValueKey(articleData[index].documentID),
+                                articleData[index].documentID,
                               );
                             }
                             return null;

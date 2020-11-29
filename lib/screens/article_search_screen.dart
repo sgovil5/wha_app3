@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:wha_app3/widgets/article/article_preview.dart';
+import '../widgets/article/article_preview.dart';
+import '../screens/articles/article_detail_screen.dart';
 
 class ArticleSearchScreen extends StatelessWidget {
   @override
@@ -26,6 +27,17 @@ class ArticleSearchScreen extends StatelessWidget {
 }
 
 class ArticleSearch extends SearchDelegate<String> {
+  void selectArticle(BuildContext context, id) {
+    Navigator.of(context)
+        .pushNamed(
+      ArticleDetailScreen.routeName,
+      arguments: id,
+    )
+        .then((result) {
+      if (result != null) {}
+    });
+  }
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -62,7 +74,13 @@ class ArticleSearch extends SearchDelegate<String> {
           );
         }
         return StreamBuilder(
-          stream: Firestore.instance.collection('articles').snapshots(),
+          stream: Firestore.instance
+              .collection('articles')
+              .where(
+                'searchKeywords',
+                arrayContains: query,
+              )
+              .snapshots(),
           builder: (ctx, articleSnapshot) {
             if (articleSnapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -70,24 +88,21 @@ class ArticleSearch extends SearchDelegate<String> {
               );
             }
             final articleData = articleSnapshot.data.documents;
-            var itemLength = 0;
-            for (int i = 0; i < articleData.length; i++) {
-              if (articleData[i]['title'].contains(query)) itemLength++;
-            }
             return GridView.builder(
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 175,
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
                 childAspectRatio: 1,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
+                crossAxisSpacing: 70,
+                mainAxisSpacing: 70,
               ),
-              itemCount: itemLength,
+              itemCount: articleData.length,
               itemBuilder: (ctx, index) {
-                if (articleData[index]['title'].contains(query)) {
+                if (articleData[index]['searchKeywords'].contains(query)) {
                   return ArticlePreview(
                     articleData[index]['title'],
                     articleData[index]['imageUrl'],
-                    key: ValueKey(articleData[index].documentID),
+                    articleData[index].documentID,
                   );
                 }
                 return null;
@@ -110,7 +125,13 @@ class ArticleSearch extends SearchDelegate<String> {
           );
         }
         return StreamBuilder(
-          stream: Firestore.instance.collection('articles').snapshots(),
+          stream: Firestore.instance
+              .collection('articles')
+              .where(
+                'searchKeywords',
+                arrayContains: query,
+              )
+              .snapshots(),
           builder: (ctx, articleSnapshot) {
             if (articleSnapshot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -118,18 +139,21 @@ class ArticleSearch extends SearchDelegate<String> {
               );
             }
             final articleData = articleSnapshot.data.documents;
-            var itemLength = 0;
-            for (int i = 0; i < articleData.length; i++) {
-              if (articleData[i]['title'].contains(query)) itemLength++;
-            }
             return ListView.builder(
-              itemCount: itemLength,
+              itemCount: articleData.length,
               itemBuilder: (ctx, index) {
                 if (articleData[index]['title'].contains(query)) {
                   return ListTile(
                     leading: Icon(Icons.library_books),
-                    title: Text(articleData[index]['title']),
-                    onTap: () {},
+                    title: Text(
+                      articleData[index]['title'],
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      selectArticle(context, articleData[index].documentID);
+                    },
                   );
                 }
                 return null;

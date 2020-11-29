@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'screens/articles/article_pdf_viewer.dart';
+import 'screens/practitioners/practitioner_detail_screen.dart';
+import 'screens/articles/article_detail_screen.dart';
 import 'screens/bottom_nav_bar.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/other/about_us_swiper.dart';
@@ -34,7 +37,10 @@ class _WHAAppState extends State<WHAApp> {
       ),
       initialRoute: '/',
       routes: {
+        ArticleDetailScreen.routeName: (ctx) => ArticleDetailScreen(),
         AboutUsSwiper.routeName: (ctx) => AboutUsSwiper(),
+        ArticlePDFViewer.routeName: (ctx) => ArticlePDFViewer(),
+        PractitionerDetailScreen.routeName: (ctx) => PractitionerDetailScreen(),
       },
     );
   }

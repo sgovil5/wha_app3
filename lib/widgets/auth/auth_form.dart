@@ -110,7 +110,7 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                   if (!widget.isLoading)
                     FlatButton(
-                      textColor: Theme.of(context).primaryColor,
+                      textColor: Colors.black,
                       child: Text(_isLogin
                           ? 'Create new account'
                           : 'I already have an account'),
