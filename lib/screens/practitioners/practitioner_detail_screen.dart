@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../widgets/article/article_preview.dart';
 
 class PractitionerDetailScreen extends StatelessWidget {
   static const routeName = '/practitioner-detail';
@@ -129,23 +131,63 @@ class PractitionerDetailScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                buildSection(
-                  context,
-                  "Topics",
-                  "Here are the topics this practitioner is an expert at",
-                  "Check out topics",
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "All the articles of the practitioner",
+                    style: TextStyle(
+                      fontSize: 28,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 ),
-                buildSection(
-                  context,
-                  "Practitioners",
-                  "Here are the practitioners similar to this one",
-                  "Check out practitioners",
-                ),
-                buildSection(
-                  context,
-                  "Articles",
-                  "Here are the articles from this practitioner",
-                  "Check out articles",
+                Container(
+                  child: FutureBuilder(
+                    future: FirebaseAuth.instance.currentUser(),
+                    builder: (ctx, futureSnapshot) {
+                      if (futureSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      return StreamBuilder(
+                        stream: Firestore.instance
+                            .collection('articles')
+                            .where('author', isEqualTo: practitioner['name'])
+                            .snapshots(),
+                        builder: (ctx, articleSnapshot) {
+                          if (articleSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          final articleData = articleSnapshot.data.documents;
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  height: 200,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (ctx, index) {
+                                      return ArticlePreview(
+                                        articleData[index]['title'],
+                                        articleData[index]['imageUrl'],
+                                        articleData[index].documentID,
+                                      );
+                                    },
+                                    itemCount: articleData.length,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

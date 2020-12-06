@@ -20,7 +20,6 @@ class ArticleSearchScreen extends StatelessWidget {
   Widget buildModalitySection(BuildContext context, String modality) {
     return InkWell(
       onTap: () {
-        print("hi");
         selectModality(context, modality);
       },
       child: Container(
