@@ -7,6 +7,7 @@ import 'screens/articles/article_detail_screen.dart';
 import 'screens/bottom_nav_bar.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/other/about_us_swiper.dart';
+import 'screens/modality_article_view.dart';
 
 void main() {
   runApp(WHAApp());
@@ -41,6 +42,7 @@ class _WHAAppState extends State<WHAApp> {
         AboutUsSwiper.routeName: (ctx) => AboutUsSwiper(),
         ArticlePDFViewer.routeName: (ctx) => ArticlePDFViewer(),
         PractitionerDetailScreen.routeName: (ctx) => PractitionerDetailScreen(),
+        ModalityArticleView.routeName: (ctx) => ModalityArticleView(),
       },
     );
   }

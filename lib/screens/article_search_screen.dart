@@ -1,10 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../screens/modality_article_view.dart';
 import '../widgets/article/article_preview.dart';
 import '../screens/articles/article_detail_screen.dart';
 
 class ArticleSearchScreen extends StatelessWidget {
+  void selectModality(BuildContext context, modality) {
+    Navigator.of(context)
+        .pushNamed(
+      ModalityArticleView.routeName,
+      arguments: modality,
+    )
+        .then((result) {
+      if (result != null) {}
+    });
+  }
+
+  Widget buildModalitySection(BuildContext context, String modality) {
+    return InkWell(
+      onTap: () {
+        print("hi");
+        selectModality(context, modality);
+      },
+      child: Container(
+        width: double.infinity,
+        height: 100,
+        margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+        child: Card(
+          elevation: 2,
+          color: Colors.blueAccent,
+          child: Container(
+            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            alignment: Alignment.center,
+            child: Text(
+              modality,
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +63,23 @@ class ArticleSearchScreen extends StatelessWidget {
               );
             },
           )
+        ],
+      ),
+      body: Column(
+        children: [
+          Container(
+            alignment: Alignment.center,
+            child: Text(
+              "Sort by Modality",
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+              ),
+            ),
+            padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+          ),
+          buildModalitySection(context, 'Yoga'),
+          buildModalitySection(context, 'Meditation')
         ],
       ),
     );
