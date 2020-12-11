@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wha_app3/widgets/article/article_item.dart';
 
@@ -22,6 +24,41 @@ class ArticleOverviewScreen extends StatelessWidget {
             ArticleItem(modality: 'meditation'),
           ],
         ),
+      ),
+      floatingActionButton: FutureBuilder(
+        future: FirebaseAuth.instance.currentUser(),
+        builder: (ctx, futureSnapshot) {
+          if (futureSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final uid = futureSnapshot.data.uid;
+          return StreamBuilder(
+            stream: Firestore.instance
+                .collection('users')
+                .document(uid)
+                .snapshots(),
+            builder: (ctx, userSnapshot) {
+              if (userSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              var userDocument = userSnapshot.data;
+              if (userDocument['isPractitioner']) {
+                return FloatingActionButton(
+                  onPressed: () {},
+                  child: Icon(Icons.add),
+                );
+              }
+              return Container(
+                height: 0,
+                width: 0,
+              );
+            },
+          );
+        },
       ),
     );
   }
