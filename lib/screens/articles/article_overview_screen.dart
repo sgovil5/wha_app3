@@ -1,7 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wha_app3/screens/articles/article_submit_form.dart';
 import 'package:wha_app3/widgets/article/article_item.dart';
+
+void uploadArticle(BuildContext context) {
+  Navigator.of(context)
+      .pushNamed(
+    ArticleSubmitForm.routeName,
+  )
+      .then((result) {
+    if (result != null) {}
+  });
+}
 
 class ArticleOverviewScreen extends StatelessWidget {
   @override
@@ -48,7 +59,9 @@ class ArticleOverviewScreen extends StatelessWidget {
               var userDocument = userSnapshot.data;
               if (userDocument['isPractitioner']) {
                 return FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    uploadArticle(context);
+                  },
                   child: Icon(Icons.add),
                 );
               }

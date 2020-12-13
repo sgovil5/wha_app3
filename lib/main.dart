@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'screens/articles/article_submit_form.dart';
 import 'screens/articles/article_pdf_viewer.dart';
 import 'screens/practitioners/practitioner_detail_screen.dart';
 import 'screens/articles/article_detail_screen.dart';
@@ -43,6 +44,7 @@ class _WHAAppState extends State<WHAApp> {
         ArticlePDFViewer.routeName: (ctx) => ArticlePDFViewer(),
         PractitionerDetailScreen.routeName: (ctx) => PractitionerDetailScreen(),
         ModalityArticleView.routeName: (ctx) => ModalityArticleView(),
+        ArticleSubmitForm.routeName: (ctx) => ArticleSubmitForm(),
       },
     );
   }
