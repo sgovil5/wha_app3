@@ -43,6 +43,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .setData({
           'username': username,
           'email': email,
+          'isPractitioner': false,
         });
       }
     } on PlatformException catch (err) {

@@ -137,7 +137,7 @@ class ArticleSearch extends SearchDelegate<String> {
               .collection('articles')
               .where(
                 'searchKeywords',
-                arrayContains: query,
+                arrayContains: query.toLowerCase(),
               )
               .snapshots(),
           builder: (ctx, articleSnapshot) {
@@ -157,7 +157,8 @@ class ArticleSearch extends SearchDelegate<String> {
               ),
               itemCount: articleData.length,
               itemBuilder: (ctx, index) {
-                if (articleData[index]['searchKeywords'].contains(query)) {
+                if (articleData[index]['searchKeywords']
+                    .contains(query.toLowerCase())) {
                   return ArticlePreview(
                     articleData[index]['title'],
                     articleData[index]['imageUrl'],
@@ -188,7 +189,7 @@ class ArticleSearch extends SearchDelegate<String> {
               .collection('articles')
               .where(
                 'searchKeywords',
-                arrayContains: query,
+                arrayContains: query.toLowerCase(),
               )
               .snapshots(),
           builder: (ctx, articleSnapshot) {
@@ -201,7 +202,7 @@ class ArticleSearch extends SearchDelegate<String> {
             return ListView.builder(
               itemCount: articleData.length,
               itemBuilder: (ctx, index) {
-                if (articleData[index]['title'].contains(query)) {
+                if (articleData[index]['title'].contains(query.toLowerCase())) {
                   return ListTile(
                     leading: Icon(Icons.library_books),
                     title: Text(

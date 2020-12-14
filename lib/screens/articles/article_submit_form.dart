@@ -34,37 +34,76 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
   void _trySubmit() async {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
-    if (isValid) {
+    if (pdf == null) {
+      AlertDialog(
+        title: Text('You haven\'t selected a pdf'),
+        content: Text('Please select a pdf'),
+        actions: [
+          FlatButton(
+            child: Text("Okay"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    } else if (isValid) {
       _formKey.currentState.save();
       try {
         final ref = FirebaseStorage.instance
             .ref()
             .child('article_pdf')
-            .child(title + '-' + author + '.pdf');
+            .child(title.trim() + '-' + author.trim() + '.pdf');
         await ref.putFile(pdf).onComplete;
         final pdfUrl = await ref.getDownloadURL();
         await Firestore.instance
             .collection('articles')
-            .document(title + '-' + author)
+            .document(title.trim() + '-' + author.trim())
             .setData({
           'author': author.trim(),
           'imageUrl': imageUrl.trim(),
           'meditation': meditation,
           'pdfUrl': pdfUrl,
-          'searchKeywords': setSearchParam(title),
+          'searchKeywords': setSearchParam(title.trim().toLowerCase()),
           'title': title.trim(),
           'yoga': yoga,
+        }).then((value) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Your article has been submitted'),
+                content: Text('Your article will now be shown to users'),
+                actions: [
+                  FlatButton(
+                    child: Text("Okay"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+            barrierDismissible: false,
+          );
         });
       } on PlatformException catch (err) {
-        var message = 'An Error Occured, please check your credentials';
+        var message = 'An Error Occured';
         if (err.message != null) {
           message = err.message;
         }
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-            backgroundColor: Colors.red,
-          ),
+        AlertDialog(
+          title: Text('There was an error'),
+          content: Text(message),
+          actions: [
+            FlatButton(
+              child: Text("Okay"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       } catch (err) {
         print(err);
@@ -88,6 +127,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
 
   Widget _buildTitle() {
     return TextFormField(
+      style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: 'Enter the Title',
         focusColor: Colors.white,
@@ -109,6 +149,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
 
   Widget _buildDescription() {
     return TextFormField(
+      style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: 'Enter a Short Description',
         focusColor: Colors.white,
@@ -130,6 +171,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
 
   Widget _buildAuthor() {
     return TextFormField(
+      style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: 'Enter the Author\'s name',
         focusColor: Colors.white,
@@ -151,6 +193,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
 
   Widget _buildImageUrl() {
     return TextFormField(
+      style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: 'Enter a valid Image URL',
         focusColor: Colors.white,
@@ -159,7 +202,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
       validator: (String value) {
         if (value.isEmpty) {
           return "Your image URL cannot be empty";
-        } else if (!(value.contains('.jpg') || value.contains('.png'))) {
+        } else if (!(value.contains('.jpeg') || value.contains('.png'))) {
           return "This is not a valid image";
         }
         return null;
@@ -232,7 +275,21 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
                     //style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
                 ),
-                SizedBox(height: 100),
+                if (pdf == null)
+                  Container(
+                    child: Text(
+                      "You have not chosen a PDF yet",
+                      style: TextStyle(color: Colors.red, fontSize: 15),
+                    ),
+                  ),
+                if (pdf != null)
+                  Container(
+                    child: Text(
+                      "You have chosen a PDF",
+                      style: TextStyle(color: Colors.green, fontSize: 15),
+                    ),
+                  ),
+                SizedBox(height: 50),
                 RaisedButton(
                   child: Text("Submit Article"),
                   onPressed: _trySubmit,
