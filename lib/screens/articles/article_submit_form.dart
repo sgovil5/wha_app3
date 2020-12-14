@@ -65,7 +65,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
           'author': author.trim(),
           'imageUrl': imageUrl.trim(),
           'meditation': meditation,
-          'naturopathicMedicine': naturopathicMedicine,
+          'naturomedicine': naturopathicMedicine,
           'nutrition': nutrition,
           'pdfUrl': pdfUrl,
           'searchKeywords': setSearchParam(title.trim().toLowerCase()),
@@ -206,7 +206,9 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
       validator: (String value) {
         if (value.isEmpty) {
           return "Your image URL cannot be empty";
-        } else if (!(value.contains('.jpeg') || value.contains('.png'))) {
+        } else if (!(value.contains('.jpeg') ||
+            value.contains('.png') ||
+            value.contains('.jpg'))) {
           return "This is not a valid image";
         }
         return null;
@@ -271,7 +273,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
                     'Nutrition',
                     style: TextStyle(color: Colors.white),
                   ),
-                  value: meditation,
+                  value: nutrition,
                   onChanged: (value) {
                     setState(() {
                       nutrition = value;
@@ -280,10 +282,10 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
                 ),
                 SwitchListTile(
                   title: const Text(
-                    'Naturopathic Medicine',
+                    'NaturoMedicine',
                     style: TextStyle(color: Colors.white),
                   ),
-                  value: meditation,
+                  value: naturopathicMedicine,
                   onChanged: (value) {
                     setState(() {
                       naturopathicMedicine = value;

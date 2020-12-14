@@ -24,7 +24,7 @@ class _ArticlePDFViewerState extends State<ArticlePDFViewer> {
         }
         var article = snapshot.data;
         return Scaffold(
-          appBar: AppBar(title: Text('Example')),
+          appBar: AppBar(title: Text(article['title'])),
           body: Container(
             child: SfPdfViewer.network(article['pdfUrl']),
           ),

@@ -37,7 +37,7 @@ class ArticleOverviewScreen extends StatelessWidget {
               modality: 'nutrition',
             ),
             ArticleItem(
-              modality: 'naturopathic medicine',
+              modality: 'naturomedicine',
             )
           ],
         ),
