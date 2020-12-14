@@ -78,7 +78,9 @@ class ArticleSearchScreen extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
           ),
           buildModalitySection(context, 'Yoga'),
-          buildModalitySection(context, 'Meditation')
+          buildModalitySection(context, 'Meditation'),
+          buildModalitySection(context, 'Nutrition'),
+          buildModalitySection(context, 'Naturopathic Medicine'),
         ],
       ),
     );

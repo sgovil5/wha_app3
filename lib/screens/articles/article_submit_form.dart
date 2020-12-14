@@ -18,6 +18,8 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
   String imageUrl;
   bool meditation = false;
   bool yoga = false;
+  bool nutrition = false;
+  bool naturopathicMedicine = false;
   File pdf;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -63,6 +65,8 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
           'author': author.trim(),
           'imageUrl': imageUrl.trim(),
           'meditation': meditation,
+          'naturopathicMedicine': naturopathicMedicine,
+          'nutrition': nutrition,
           'pdfUrl': pdfUrl,
           'searchKeywords': setSearchParam(title.trim().toLowerCase()),
           'title': title.trim(),
@@ -259,6 +263,30 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
                   onChanged: (value) {
                     setState(() {
                       meditation = value;
+                    });
+                  },
+                ),
+                SwitchListTile(
+                  title: const Text(
+                    'Nutrition',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  value: meditation,
+                  onChanged: (value) {
+                    setState(() {
+                      nutrition = value;
+                    });
+                  },
+                ),
+                SwitchListTile(
+                  title: const Text(
+                    'Naturopathic Medicine',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  value: meditation,
+                  onChanged: (value) {
+                    setState(() {
+                      naturopathicMedicine = value;
                     });
                   },
                 ),
