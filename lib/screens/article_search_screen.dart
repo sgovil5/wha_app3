@@ -64,24 +64,26 @@ class ArticleSearchScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-            alignment: Alignment.center,
-            child: Text(
-              "Sort by Modality",
-              style: TextStyle(
-                fontSize: 30,
-                color: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                "Sort by Modality",
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                ),
               ),
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
             ),
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-          ),
-          buildModalitySection(context, 'Yoga'),
-          buildModalitySection(context, 'Meditation'),
-          buildModalitySection(context, 'Nutrition'),
-          buildModalitySection(context, 'NaturoMedicine'),
-        ],
+            buildModalitySection(context, 'Yoga'),
+            buildModalitySection(context, 'Meditation'),
+            buildModalitySection(context, 'Nutrition'),
+            buildModalitySection(context, 'NaturoMedicine'),
+          ],
+        ),
       ),
     );
   }
@@ -159,15 +161,11 @@ class ArticleSearch extends SearchDelegate<String> {
               ),
               itemCount: articleData.length,
               itemBuilder: (ctx, index) {
-                if (articleData[index]['searchKeywords']
-                    .contains(query.toLowerCase())) {
-                  return ArticlePreview(
-                    articleData[index]['title'],
-                    articleData[index]['imageUrl'],
-                    articleData[index].documentID,
-                  );
-                }
-                return null;
+                return ArticlePreview(
+                  articleData[index]['title'],
+                  articleData[index]['imageUrl'],
+                  articleData[index].documentID,
+                );
               },
             );
           },
@@ -204,21 +202,18 @@ class ArticleSearch extends SearchDelegate<String> {
             return ListView.builder(
               itemCount: articleData.length,
               itemBuilder: (ctx, index) {
-                if (articleData[index]['title'].contains(query.toLowerCase())) {
-                  return ListTile(
-                    leading: Icon(Icons.library_books),
-                    title: Text(
-                      articleData[index]['title'],
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                return ListTile(
+                  leading: Icon(Icons.library_books),
+                  title: Text(
+                    articleData[index]['title'],
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
-                    onTap: () {
-                      selectArticle(context, articleData[index].documentID);
-                    },
-                  );
-                }
-                return null;
+                  ),
+                  onTap: () {
+                    selectArticle(context, articleData[index].documentID);
+                  },
+                );
               },
             );
           },
