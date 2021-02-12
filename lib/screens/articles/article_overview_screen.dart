@@ -28,7 +28,9 @@ class ArticleOverviewScreen extends StatelessWidget {
               child: Text(
                 'Welcome to the WHA App',
                 style: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 20),
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 22,
+                ),
               ),
             ),
             ArticleItem(modality: 'yoga'),
