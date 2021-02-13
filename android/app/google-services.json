@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:385380913879:android:937b1e1c8be4f0fc7d9692",
         "android_client_info": {
-          "package_name": "com.example.wha_app3"
+          "package_name": "com.WHA.wha_app3"
         }
       },
       "oauth_client": [
@@ -39,7 +39,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:385380913879:android:d1f32f0c2a55489f7d9692",
         "android_client_info": {
-          "package_name": "com.example.wha_app3"
+          "package_name": "com.WHA.wha_app3"
         }
       },
       "oauth_client": [
