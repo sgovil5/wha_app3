@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:wha_app3/widgets/pickers/user_image_picker.dart';
 
 class ArticleSubmitForm extends StatefulWidget {
   static const routeName = '/article-submit';
@@ -15,13 +16,19 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
   String title;
   String author;
   String description;
-  String imageUrl;
   bool meditation = false;
   bool yoga = false;
   bool nutrition = false;
   bool naturopathicMedicine = false;
+  bool ayurveda = false;
+  bool other = false;
   File pdf;
+  File articleImageFile;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void _pickedImage(File image) {
+    articleImageFile = image;
+  }
 
   List<String> setSearchParam(String inputTitle) {
     List<String> searchList = List();
@@ -49,24 +56,51 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
           ),
         ],
       );
+    } else if (articleImageFile == null) {
+      AlertDialog(
+        title: Text('You haven\'t selected an image'),
+        content: Text('Please select an image'),
+        actions: [
+          FlatButton(
+            child: Text("Okay"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
     } else if (isValid) {
       _formKey.currentState.save();
       try {
-        final ref = FirebaseStorage.instance
+        // Put PDF in Firebase Storage
+        final pdfRef = FirebaseStorage.instance
             .ref()
-            .child('article_pdf')
+            .child('articles')
+            .child('pdf')
             .child(title.trim() + '-' + author.trim() + '.pdf');
-        await ref.putFile(pdf).onComplete;
-        final pdfUrl = await ref.getDownloadURL();
+        await pdfRef.putFile(pdf).onComplete;
+        final pdfUrl = await pdfRef.getDownloadURL();
+
+        // Put Image in Firebase Storage
+        final imageRef = FirebaseStorage.instance
+            .ref()
+            .child('articles')
+            .child('image')
+            .child(title.trim() + '-' + author.trim() + '.jpeg');
+        await imageRef.putFile(articleImageFile).onComplete;
+        final imageUrl = await imageRef.getDownloadURL();
+
         await Firestore.instance
             .collection('articles')
             .document(title.trim() + '-' + author.trim())
             .setData({
           'author': author.trim(),
-          'imageUrl': imageUrl.trim(),
+          'ayurveda': ayurveda,
+          'imageUrl': imageUrl,
           'meditation': meditation,
           'naturomedicine': naturopathicMedicine,
           'nutrition': nutrition,
+          'other': other,
           'pdfUrl': pdfUrl,
           'searchKeywords': setSearchParam(title.trim().toLowerCase()),
           'title': title.trim(),
@@ -195,27 +229,89 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
     );
   }
 
-  Widget _buildImageUrl() {
-    return TextFormField(
-      style: TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        labelText: 'Enter a valid Image URL',
-        focusColor: Colors.white,
-        labelStyle: TextStyle(color: Colors.white),
-      ),
-      validator: (String value) {
-        if (value.isEmpty) {
-          return "Your image URL cannot be empty";
-        } else if (!(value.contains('.jpeg') ||
-            value.contains('.png') ||
-            value.contains('.jpg'))) {
-          return "This is not a valid image";
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        imageUrl = value;
-      },
+  Widget _buildModalities() {
+    return Column(
+      children: [
+        Container(
+          child: Text(
+            "Toggle the modalities",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          padding: EdgeInsets.all(20),
+        ),
+        SwitchListTile(
+          title: const Text(
+            'Yoga',
+            style: TextStyle(color: Colors.white),
+          ),
+          value: yoga,
+          onChanged: (value) {
+            setState(() {
+              yoga = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: const Text(
+            'Meditation',
+            style: TextStyle(color: Colors.white),
+          ),
+          value: meditation,
+          onChanged: (value) {
+            setState(() {
+              meditation = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: const Text(
+            'Nutrition',
+            style: TextStyle(color: Colors.white),
+          ),
+          value: nutrition,
+          onChanged: (value) {
+            setState(() {
+              nutrition = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: const Text(
+            'NaturoMedicine',
+            style: TextStyle(color: Colors.white),
+          ),
+          value: naturopathicMedicine,
+          onChanged: (value) {
+            setState(() {
+              naturopathicMedicine = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: const Text(
+            'Ayurveda',
+            style: TextStyle(color: Colors.white),
+          ),
+          value: ayurveda,
+          onChanged: (value) {
+            setState(() {
+              ayurveda = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: const Text(
+            'Other',
+            style: TextStyle(color: Colors.white),
+          ),
+          value: other,
+          onChanged: (value) {
+            setState(() {
+              other = value;
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -236,62 +332,12 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
                 _buildTitle(),
                 _buildDescription(),
                 _buildAuthor(),
-                _buildImageUrl(),
-                Container(
-                  child: Text(
-                    "Toggle the modalities",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  padding: EdgeInsets.all(20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 20,
                 ),
-                SwitchListTile(
-                  title: const Text(
-                    'Yoga',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  value: yoga,
-                  onChanged: (value) {
-                    setState(() {
-                      yoga = value;
-                    });
-                  },
-                ),
-                SwitchListTile(
-                  title: const Text(
-                    'Meditation',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  value: meditation,
-                  onChanged: (value) {
-                    setState(() {
-                      meditation = value;
-                    });
-                  },
-                ),
-                SwitchListTile(
-                  title: const Text(
-                    'Nutrition',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  value: nutrition,
-                  onChanged: (value) {
-                    setState(() {
-                      nutrition = value;
-                    });
-                  },
-                ),
-                SwitchListTile(
-                  title: const Text(
-                    'NaturoMedicine',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  value: naturopathicMedicine,
-                  onChanged: (value) {
-                    setState(() {
-                      naturopathicMedicine = value;
-                    });
-                  },
-                ),
+                UserImagePicker(_pickedImage),
+                _buildModalities(),
                 SizedBox(
                   height: 20,
                 ),

@@ -33,14 +33,24 @@ class ArticleOverviewScreen extends StatelessWidget {
                 ),
               ),
             ),
-            ArticleItem(modality: 'yoga'),
-            ArticleItem(modality: 'meditation'),
+            ArticleItem(
+              modality: 'yoga',
+            ),
+            ArticleItem(
+              modality: 'meditation',
+            ),
             ArticleItem(
               modality: 'nutrition',
             ),
             ArticleItem(
               modality: 'naturomedicine',
-            )
+            ),
+            ArticleItem(
+              modality: 'ayurveda',
+            ),
+            ArticleItem(
+              modality: 'other',
+            ),
           ],
         ),
       ),
