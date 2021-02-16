@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +33,31 @@ class _WHAAppState extends State<WHAApp> {
         stream: FirebaseAuth.instance.onAuthStateChanged,
         builder: (ctx, userSnapshot) {
           if (userSnapshot.hasData) {
-            return BottomNavBar();
+            return FutureBuilder(
+              future: FirebaseAuth.instance.currentUser(),
+              builder: (ctx, futureSnapshot) {
+                if (futureSnapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                final uid = futureSnapshot.data.uid;
+                return StreamBuilder(
+                  stream: Firestore.instance
+                      .collection('users')
+                      .document(uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return BottomNavBar(snapshot.data['isPractitioner']);
+                  },
+                );
+              },
+            );
           }
           return AuthScreen();
         },
