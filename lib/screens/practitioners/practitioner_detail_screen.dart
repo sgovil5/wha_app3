@@ -86,7 +86,10 @@ class PractitionerDetailScreen extends StatelessWidget {
                   width: double.infinity,
                   child: CircleAvatar(
                     radius: 100,
-                    backgroundImage: NetworkImage(practitioner['imageUrl']),
+                    backgroundImage: NetworkImage(
+                        practitioner['imageUrl'] == null
+                            ? null
+                            : practitioner['imageUrl']),
                   ),
                 ),
                 Container(
@@ -101,12 +104,10 @@ class PractitionerDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  height: 100,
-                  width: double.infinity,
-                  child: Column(
-                    children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (practitioner['websiteUrl'] != null)
                       Text(
                         "Website: " + practitioner['websiteUrl'],
                         style: TextStyle(
@@ -114,6 +115,7 @@ class PractitionerDetailScreen extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
+                    if (practitioner['socialMediaTag'] != null)
                       Text(
                         "Social Media: " + practitioner['socialMediaTag'],
                         style: TextStyle(
@@ -121,6 +123,7 @@ class PractitionerDetailScreen extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
+                    if (practitioner['email'] != null)
                       Text(
                         "Email: " + practitioner['email'],
                         style: TextStyle(
@@ -128,8 +131,7 @@ class PractitionerDetailScreen extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                    ],
-                  ),
+                  ],
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
@@ -152,6 +154,7 @@ class PractitionerDetailScreen extends StatelessWidget {
                       return StreamBuilder(
                         stream: Firestore.instance
                             .collection('articles')
+                            //TODO: change name to user id
                             .where('author', isEqualTo: practitioner['name'])
                             .snapshots(),
                         builder: (ctx, articleSnapshot) {

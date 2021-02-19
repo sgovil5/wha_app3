@@ -73,17 +73,6 @@ class ArticleDetailScreen extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Date Written: 10/19/2020', //${selectedArticle.date.substring(0, 10)}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 26,
-                    ),
-                  ),
-                ),
-                Container(
                   height: 150,
                   alignment: Alignment.bottomCenter,
                   child: RaisedButton(

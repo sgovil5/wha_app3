@@ -15,6 +15,17 @@ class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
+  Future<bool> practitionerCheck(String email) async {
+    final list =
+        await Firestore.instance.collection('list').document('list').get();
+    final practitionerList = list['list'].map((e) => e.toLowerCase()).toList();
+    print(practitionerList);
+    if (practitionerList.contains(email.toLowerCase()))
+      return true;
+    else
+      return false;
+  }
+
   void _submitAuthForm(
     String email,
     String password,
@@ -37,13 +48,24 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
-        await Firestore.instance
-            .collection('users')
-            .document(authResult.user.uid)
-            .setData({
-          'username': username,
-          'email': email,
-          'isPractitioner': false,
+        practitionerCheck(email).then((value) async {
+          await Firestore.instance
+              .collection('users')
+              .document(authResult.user.uid)
+              .setData({
+            'username': username,
+            'email': email.toLowerCase(),
+            'isPractitioner': value,
+          });
+          if (value) {
+            await Firestore.instance
+                .collection('practitioners')
+                .document(authResult.user.uid)
+                .setData({
+              'email': email.toLowerCase(),
+              'username': username,
+            });
+          }
         });
       }
     } on PlatformException catch (err) {

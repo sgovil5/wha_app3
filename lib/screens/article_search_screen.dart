@@ -83,6 +83,7 @@ class ArticleSearchScreen extends StatelessWidget {
             buildModalitySection(context, 'Nutrition'),
             buildModalitySection(context, 'NaturoMedicine'),
             buildModalitySection(context, 'Ayurveda'),
+            buildModalitySection(context, 'BodyWorks'),
             buildModalitySection(context, 'Other'),
           ],
         ),

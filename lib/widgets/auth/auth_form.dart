@@ -115,9 +115,11 @@ class _AuthFormState extends State<AuthForm> {
                           ? 'Create new account'
                           : 'I already have an account'),
                       onPressed: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
+                        setState(
+                          () {
+                            _isLogin = !_isLogin;
+                          },
+                        );
                       },
                     ),
                 ],

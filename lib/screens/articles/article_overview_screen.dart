@@ -49,6 +49,9 @@ class ArticleOverviewScreen extends StatelessWidget {
               modality: 'ayurveda',
             ),
             ArticleItem(
+              modality: 'bodyworks',
+            ),
+            ArticleItem(
               modality: 'other',
             ),
           ],

@@ -21,6 +21,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
   bool nutrition = false;
   bool naturopathicMedicine = false;
   bool ayurveda = false;
+  bool bodyworks = false;
   bool other = false;
   File pdf;
   File articleImageFile;
@@ -96,6 +97,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
             .setData({
           'author': author.trim(),
           'ayurveda': ayurveda,
+          'bodyworks': bodyworks,
           'imageUrl': imageUrl,
           'meditation': meditation,
           'naturomedicine': naturopathicMedicine,
@@ -296,6 +298,18 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
           onChanged: (value) {
             setState(() {
               ayurveda = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: const Text(
+            'BodyWorks',
+            style: TextStyle(color: Colors.white),
+          ),
+          value: bodyworks,
+          onChanged: (value) {
+            setState(() {
+              bodyworks = value;
             });
           },
         ),
