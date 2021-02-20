@@ -72,9 +72,9 @@ class _PractitionerDirectoryScreenState
                             );
                           },
                           child: PractitionerPreview(
-                            practitionerData[index]['name'],
+                            practitionerData[index]['username'],
                             practitionerData[index]['imageUrl'],
-                            practitionerData[index]['modalityText'],
+                            practitionerData[index]['description'],
                             key: ValueKey(practitionerData[index].documentID),
                           ),
                         ),

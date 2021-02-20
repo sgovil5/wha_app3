@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wha_app3/widgets/pickers/user_image_picker.dart';
@@ -12,8 +13,8 @@ class PractitionerProfileScreen extends StatelessWidget {
     userImageFile = image;
   }
 
-  Widget buildSection(
-      BuildContext context, String field, String detail, String uid) {
+  Widget buildSection(BuildContext context, String field, String fieldText,
+      String detail, String uid) {
     return Column(
       children: [
         Divider(
@@ -29,7 +30,7 @@ class PractitionerProfileScreen extends StatelessWidget {
                   padding: EdgeInsets.all(15),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    field,
+                    fieldText,
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
@@ -37,13 +38,14 @@ class PractitionerProfileScreen extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () => editForm(context, field, uid, detail),
+                  icon: Icon(Icons.edit, color: Colors.white),
+                  onPressed: () =>
+                      editForm(context, field, fieldText, uid, detail),
                 ),
               ],
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
               alignment: Alignment.centerLeft,
               child: Text(
                 detail,
@@ -67,101 +69,30 @@ class PractitionerProfileScreen extends StatelessWidget {
     BuildContext context,
   ) async {
     try {
-      var res = await Firestore.instance
+      await Firestore.instance
           .collection('practitioners')
           .document(uid)
-          .get();
-      if (res.exists) {
-        try {
-          await Firestore.instance
-              .collection('practitioners')
-              .document(uid)
-              .updateData({field: submission, uid: uid}).then(
-            (value) {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text("Your edits have been processed"),
-                    actions: [
-                      FlatButton(
-                        child: Text('Okay'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          );
-        } on PlatformException catch (e) {
+          .updateData({field: submission}).then(
+        (value) {
           showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('There was an error'),
-                content: Text(e.message),
+                title: Text("Your edits have been processed"),
                 actions: [
                   FlatButton(
                     child: Text('Okay'),
                     onPressed: () {
                       Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              );
-            },
-          );
-        }
-      } else {
-        try {
-          await Firestore.instance
-              .collection('practitioners')
-              .document(uid)
-              .setData({field: submission}).then(
-            (value) {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text("Your edits have been processed"),
-                    actions: [
-                      FlatButton(
-                        child: Text('Okay'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          );
-        } on PlatformException catch (e) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('There was an error'),
-                content: Text(e.message),
-                actions: [
-                  FlatButton(
-                    child: Text('Okay'),
-                    onPressed: () {
                       Navigator.of(context).pop();
                     },
-                  )
+                  ),
                 ],
               );
             },
           );
-        }
-      }
+        },
+      );
     } on PlatformException catch (e) {
       showDialog(
         context: context,
@@ -183,8 +114,8 @@ class PractitionerProfileScreen extends StatelessWidget {
     }
   }
 
-  void editForm(
-      BuildContext context, String field, String uid, String previousValue) {
+  void editForm(BuildContext context, String field, String fieldText,
+      String uid, String previousValue) {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     String submission = previousValue;
     bool isValid = false;
@@ -199,7 +130,7 @@ class PractitionerProfileScreen extends StatelessWidget {
                 padding: EdgeInsets.all(20),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'Input your $field',
+                    labelText: 'Input your $fieldText',
                     labelStyle: TextStyle(color: Colors.black),
                   ),
                   validator: (String value) {
@@ -224,8 +155,8 @@ class PractitionerProfileScreen extends StatelessWidget {
                   FocusScope.of(context).unfocus();
                   if (isValid) {
                     _formKey.currentState.save();
+                    trySubmit(isValid, submission, field, uid, context);
                   }
-                  trySubmit(isValid, submission, field, uid, context);
                 },
               ),
             ],
@@ -233,6 +164,75 @@ class PractitionerProfileScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  void tryImageSubmit(BuildContext context, String uid) async {
+    if (userImageFile == null) {
+      AlertDialog(
+        title: Text('You haven\'t selected an image'),
+        content: Text('Please select an image'),
+        actions: [
+          FlatButton(
+            child: Text("Okay"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    } else {
+      try {
+        final imageRef = FirebaseStorage.instance
+            .ref()
+            .child('practitioners')
+            .child('image')
+            .child(uid + '.jpeg');
+        await imageRef.putFile(userImageFile).onComplete;
+        final imageUrl = await imageRef.getDownloadURL();
+
+        await Firestore.instance
+            .collection('practitioners')
+            .document(uid)
+            .updateData({'imageUrl': imageUrl}).then((value) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Your image has been submitted'),
+                content:
+                    Text('Your image will now be displayed in the directory'),
+                actions: [
+                  FlatButton(
+                    child: Text("Okay"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+            barrierDismissible: false,
+          );
+        });
+      } on PlatformException catch (err) {
+        var message = 'An Error Occured';
+        if (err.message != null) {
+          message = err.message;
+        }
+        AlertDialog(
+          title: Text('There was an error'),
+          content: Text(message),
+          actions: [
+            FlatButton(
+              child: Text("Okay"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      }
+    }
   }
 
   @override
@@ -251,34 +251,57 @@ class PractitionerProfileScreen extends StatelessWidget {
           }
           final uid = futureSnapshot.data.uid;
           return StreamBuilder(
-              stream: Firestore.instance
-                  .collection('practitioners')
-                  .document(uid)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                return SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // User Image
-                      Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text(
-                          'Upload your profile picture',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(20),
-                        child: UserImagePicker(_pickedImage),
-                      ),
-                      buildSection(context, "name", "jack", uid)
-                    ],
-                  ),
+            stream: Firestore.instance
+                .collection('practitioners')
+                .document(uid)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
-              });
+              }
+              final practitionerData = snapshot.data;
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // User Image
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(top: 10),
+                      child: Text(
+                        'Upload your profile picture',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(20),
+                      child: UserImagePicker(_pickedImage),
+                    ),
+                    RaisedButton(
+                      child: Text('Submit Image'),
+                      onPressed: () {
+                        tryImageSubmit(context, uid);
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    buildSection(context, "username", "Username",
+                        practitionerData["username"], uid),
+                    buildSection(context, "description", "Description",
+                        practitionerData['description'], uid),
+                    buildSection(context, "socialMediaTag", "Social Media Tag",
+                        practitionerData['socialMediaTag'], uid),
+                    buildSection(context, "websiteUrl", "Website URL",
+                        practitionerData['websiteUrl'], uid),
+                  ],
+                ),
+              );
+            },
+          );
         },
       ),
     );

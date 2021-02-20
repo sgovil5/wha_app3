@@ -73,7 +73,7 @@ class PractitionerDetailScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              practitioner['name'],
+              practitioner['username'],
             ),
             backgroundColor: Theme.of(context).primaryColor,
           ),
@@ -86,10 +86,9 @@ class PractitionerDetailScreen extends StatelessWidget {
                   width: double.infinity,
                   child: CircleAvatar(
                     radius: 100,
-                    backgroundImage: NetworkImage(
-                        practitioner['imageUrl'] == null
-                            ? null
-                            : practitioner['imageUrl']),
+                    backgroundImage: practitioner['imageUrl'] == ""
+                        ? null
+                        : NetworkImage(practitioner['imageUrl']),
                   ),
                 ),
                 Container(
@@ -97,7 +96,7 @@ class PractitionerDetailScreen extends StatelessWidget {
                   height: 80,
                   width: double.infinity,
                   child: Text(
-                    practitioner['name'],
+                    practitioner['username'],
                     style: TextStyle(
                       fontSize: 50,
                       color: Colors.white,
@@ -107,7 +106,7 @@ class PractitionerDetailScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (practitioner['websiteUrl'] != null)
+                    if (practitioner['websiteUrl'] != "")
                       Text(
                         "Website: " + practitioner['websiteUrl'],
                         style: TextStyle(
@@ -115,7 +114,7 @@ class PractitionerDetailScreen extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                    if (practitioner['socialMediaTag'] != null)
+                    if (practitioner['socialMediaTag'] != "")
                       Text(
                         "Social Media: " + practitioner['socialMediaTag'],
                         style: TextStyle(
@@ -123,7 +122,7 @@ class PractitionerDetailScreen extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                    if (practitioner['email'] != null)
+                    if (practitioner['email'] != "")
                       Text(
                         "Email: " + practitioner['email'],
                         style: TextStyle(
@@ -155,7 +154,8 @@ class PractitionerDetailScreen extends StatelessWidget {
                         stream: Firestore.instance
                             .collection('articles')
                             //TODO: change name to user id
-                            .where('author', isEqualTo: practitioner['name'])
+                            .where('author',
+                                isEqualTo: practitioner['username'])
                             .snapshots(),
                         builder: (ctx, articleSnapshot) {
                           if (articleSnapshot.connectionState ==

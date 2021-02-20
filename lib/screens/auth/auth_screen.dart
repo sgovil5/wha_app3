@@ -64,6 +64,10 @@ class _AuthScreenState extends State<AuthScreen> {
                 .setData({
               'email': email.toLowerCase(),
               'username': username,
+              'imageUrl': "",
+              'websiteUrl': "",
+              'description': "",
+              'socialMediaTag': "",
             });
           }
         });

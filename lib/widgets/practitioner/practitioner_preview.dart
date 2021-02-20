@@ -22,15 +22,16 @@ class PractitionerPreview extends StatelessWidget {
           ),
           Row(
             children: [
-              Container(
-                padding: EdgeInsets.all(0),
-                width: 100,
-                height: 100,
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(imageUrl),
+              if (imageUrl != "")
+                Container(
+                  padding: EdgeInsets.all(0),
+                  width: 100,
+                  height: 100,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(imageUrl),
+                  ),
                 ),
-              ),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.all(40),
