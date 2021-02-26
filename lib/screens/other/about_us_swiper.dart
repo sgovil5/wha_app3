@@ -23,8 +23,7 @@ class AboutUsSwiper extends StatelessWidget {
             width: double.infinity,
             child: CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(
-                  "https://www.wholistichealthalliance.org/images/logo.png"),
+              backgroundImage: AssetImage("assets/whalogo.png"),
             ),
           ),
           Container(

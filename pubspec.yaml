@@ -36,18 +36,27 @@ dependencies:
   flutter_plugin_pdf_viewer: any
   syncfusion_flutter_pdfviewer: ^18.3.51-beta
   file_picker: 2.0.0
+  
 
   #IMPORTANT!!!!!!!!!!!!!!!! Add configuration for image_picker in Runner/Info.plist for iOS
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  flutter_launcher_icons: "^0.8.0"
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: assets/whalogo.png
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+    - assets/whalogo.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
