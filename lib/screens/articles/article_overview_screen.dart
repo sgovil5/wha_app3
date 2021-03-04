@@ -18,20 +18,16 @@ class ArticleOverviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Welcome to WHA B-Well"),
+      ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.fromLTRB(15, 30, 15, 30),
-              child: Text(
-                'Welcome to the WHA App',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 22,
-                ),
-              ),
+            SizedBox(
+              height: 20,
+              width: double.infinity,
             ),
             ArticleItem(
               modality: 'yoga',
@@ -43,7 +39,7 @@ class ArticleOverviewScreen extends StatelessWidget {
               modality: 'nutrition',
             ),
             ArticleItem(
-              modality: 'naturomedicine',
+              modality: 'acupuncture',
             ),
             ArticleItem(
               modality: 'ayurveda',

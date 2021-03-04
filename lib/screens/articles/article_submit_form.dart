@@ -19,7 +19,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
   bool meditation = false;
   bool yoga = false;
   bool nutrition = false;
-  bool naturopathicMedicine = false;
+  bool acupuncture = false;
   bool ayurveda = false;
   bool bodyworks = false;
   bool other = false;
@@ -100,7 +100,7 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
           'bodyworks': bodyworks,
           'imageUrl': imageUrl,
           'meditation': meditation,
-          'naturomedicine': naturopathicMedicine,
+          'acupuncture': acupuncture,
           'nutrition': nutrition,
           'other': other,
           'pdfUrl': pdfUrl,
@@ -279,13 +279,13 @@ class _ArticleSubmitFormState extends State<ArticleSubmitForm> {
         ),
         SwitchListTile(
           title: const Text(
-            'NaturoMedicine',
+            'Acupuncture',
             style: TextStyle(color: Colors.white),
           ),
-          value: naturopathicMedicine,
+          value: acupuncture,
           onChanged: (value) {
             setState(() {
-              naturopathicMedicine = value;
+              acupuncture = value;
             });
           },
         ),
