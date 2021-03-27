@@ -10,6 +10,7 @@ import 'screens/bottom_nav_bar.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/other/about_us_swiper.dart';
 import 'screens/modality_article_view.dart';
+import 'screens/other/terms_conditions_swiper.dart';
 
 void main() {
   runApp(WHAApp());
@@ -66,6 +67,7 @@ class _WHAAppState extends State<WHAApp> {
       routes: {
         ArticleDetailScreen.routeName: (ctx) => ArticleDetailScreen(),
         AboutUsSwiper.routeName: (ctx) => AboutUsSwiper(),
+        TermsConditionsSwiper.routeName: (ctx) => TermsConditionsSwiper(),
         ArticlePDFViewer.routeName: (ctx) => ArticlePDFViewer(),
         PractitionerDetailScreen.routeName: (ctx) => PractitionerDetailScreen(),
         ModalityArticleView.routeName: (ctx) => ModalityArticleView(),

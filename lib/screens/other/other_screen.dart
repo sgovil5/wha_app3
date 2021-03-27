@@ -1,8 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../other/about_us_swiper.dart';
+import '../other/terms_conditions_swiper.dart';
 
 class OtherScreen extends StatelessWidget {
+  void selectTermsConditions(BuildContext context) {
+    Navigator.of(context)
+        .pushNamed(
+      TermsConditionsSwiper.routeName,
+    )
+        .then((result) {
+      if (result != null) {}
+    });
+  }
+
   void selectAboutUs(BuildContext context) {
     Navigator.of(context)
         .pushNamed(
@@ -59,7 +70,8 @@ class OtherScreen extends StatelessWidget {
           ),
           buildSection(
               context, "About Wholistic Health Alliance", selectAboutUs),
-          buildSection(context, "Terms of Use and Service", null),
+          buildSection(
+              context, "Terms of Use and Service", selectTermsConditions),
           buildSection(context, "Logout", logout),
           Divider(
             thickness: 2,

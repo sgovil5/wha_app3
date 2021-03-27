@@ -49,6 +49,9 @@ class AboutUsSwiper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("About Us"),
+      ),
       body: Swiper(
         loop: false,
         itemBuilder: (ctx, index) {
